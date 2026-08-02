@@ -604,3 +604,102 @@ Every new page must pass:
 - [ ] Correct responsive behavior
 - [ ] Correct accessibility
 - [ ] Correct light theme
+
+## 43. Component Naming
+
+All components use PascalCase:
+
+- `Button`, `Input`, `Card`, `DataTable`
+- `IconButton`, `SearchInput`, `PasswordInput`
+- `DropdownMenu`, `ContextMenu`, `CommandMenu`
+- `TirbeoThemeProvider`, `TirbeoHeader`, `TirbeoSidebar`
+
+## 44. Package Imports
+
+Always use package imports:
+
+```tsx
+import { Button, Card, DataTable } from "@tirbeo/ui";
+import { BellIcon, SettingsIcon } from "@tirbeo/icons";
+import { LineChart, BarChart } from "@tirbeo/charts";
+import { TirbeoThemeProvider } from "@tirbeo/theme";
+import { hasPermission } from "@tirbeo/permissions";
+```
+
+**Never** import internal files:
+
+```tsx
+// ❌ NEVER DO THIS
+import { Button } from "../../../packages/ui";
+import { primaryColor } from "../../../packages/theme/src";
+```
+
+## 45. Package Versioning
+
+Use semantic versioning:
+
+| Change Type | Version Bump |
+|-------------|-------------|
+| Breaking component API change | MAJOR (e.g., 1.0.0 → 2.0.0) |
+| New backward-compatible component | MINOR (e.g., 1.0.0 → 1.1.0) |
+| Bug fix | PATCH (e.g., 1.0.0 → 1.0.1) |
+
+## 46. How to Create New Components
+
+1. Search `@tirbeo/ui` first — if it exists, use it
+2. If it nearly exists, extend it
+3. If it genuinely doesn't exist, add it to `@tirbeo/ui`
+4. Never create app-specific versions of shared components (e.g., `AdminButton`, `FormsButton`)
+
+## 47. How to Extend Components
+
+Create a wrapper in the app that uses the shared component and adds app-specific behavior:
+
+```tsx
+// ✅ Allowed — app-specific wrapper
+function AdminUserTable() {
+  return <DataTable columns={userColumns} ... />;
+}
+```
+
+## 48. How NOT to Create Duplicate Components
+
+```tsx
+// ❌ NEVER DO THIS
+function AdminButton() {
+  // Entirely separate button implementation
+  return <button className="admin-btn">...</button>;
+}
+```
+
+## 49. Migration Instructions
+
+To migrate an existing app to use the Tirbeo design system:
+
+1. Install workspace packages: `pnpm add @tirbeo/ui @tirbeo/theme @tirbeo/icons @tirbeo/charts`
+2. Replace `TirbeoThemeProvider` in root layout
+3. Replace duplicated UI components with shared imports
+4. Replace hardcoded design tokens with CSS custom properties
+5. Remove `ignoreBuildErrors` from next.config
+6. Run typecheck and fix errors
+7. Remove duplicate generic UI components
+
+## 50. UI QA Checklist
+
+Every new page must pass:
+
+- [ ] Correct global header
+- [ ] Correct sidebar
+- [ ] Correct typography
+- [ ] Correct spacing
+- [ ] Correct buttons
+- [ ] Correct tabs
+- [ ] Correct cards
+- [ ] Correct tables
+- [ ] Correct charts
+- [ ] Correct loading state
+- [ ] Correct empty state
+- [ ] Correct error state
+- [ ] Correct responsive behavior
+- [ ] Correct accessibility
+- [ ] Correct light theme
